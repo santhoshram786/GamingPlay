@@ -16,23 +16,8 @@ while(True):
     print('Flop,Turn and River cards--->',*Flop_Turn_River)
   
     print("Selection")
-
-    '''if royal_flush(p1+pro):#['KING ♣','QUEEN ♣','ACE ♣','JACK ♣','10 ♣','05 ♠','09 ♠']):
-        print('royal_flush')
-    else :
-        print('Not royal_flush')
-            
-    if royal_flush(p3+pro):#['KING ♣','QUEEN ♣','ACE ♣','JACK ♣','10 ♣','05 ♠','09 ♠']):
-        print('royal_flush')
-    else :
-        print('Not royal_flush')
-
-
-        #flush
-    if flush(['KING ♣','QUEEN ♣','ACE ♣','JACK ♣','10 ♣','05 ♠','09 ♠']):
-        print('flush')
-    else :
-        print('Not flush')'''
+    for i in range(numberOfPlayers):
+        print('Player',i+1,'--',pokerModules.play(player[i]+Flop_Turn_River))
     break
      
     
