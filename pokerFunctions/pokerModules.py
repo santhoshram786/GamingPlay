@@ -41,30 +41,38 @@ def pokerMaster(n):
   
 def check_hand(hand):
     
-    if check_straight_flush(hand):
-        return 9
+    a = check_straight_flush(hand)   
+    if a[0]:
+        return 9,a[1]
      
-    if check_four_of_a_kind(hand):
-        return 8
-     
-    if check_full_house(hand):
-        return 7
-     
-    if check_flush(hand):
-        return 6
-     
-    if check_straight(hand):
-        return 5
-     
-    if check_three_of_a_kind(hand):
-        return 4
-     
-    if check_two_pairs(hand):
-        return 3
-     
-    if check_one_pairs(hand):
-        return 2
-    return 1   
+    a = check_four_of_a_kind(hand)
+    if a[0]:
+        return 8,a[1]
+    
+    a = check_full_house(hand)
+    if a[0]:
+        return 7,a[1]
+    
+    a = check_flush(hand)
+    if a[0]:
+        return 6,a[1]
+    
+    a = check_straight(hand)
+    if a[0]:
+        return 5,a[1]
+    
+    a = check_three_of_a_kind(hand)
+    if a[0]:
+        return 4,a[1]
+    
+    a = check_two_pairs(hand)
+    if a[0]:
+        return 3,a[1]
+    
+    a = check_one_pairs(hand)
+    if a[0]:
+        return 2,a[1]
+    return 1,'a'  
 
 card_order_dict = {"2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "T":10,"J":11, "Q":12, "K":13, "A":14}
 
@@ -89,17 +97,15 @@ def reuse_check_straight(hand):
     else: 
         #check straight with low Ace
         if set(values) == set(["A", "2", "3", "4", "5"]):
-            print(hand) 
             return True
         return False
     
 def check_straight_flush(hand):
     
     if reuse_check_flush(hand) and reuse_check_straight(hand):
-        print('9',hand) 
-        return True
+        return [True,hand]
     else:
-        return False
+        return [False]
 
 def check_four_of_a_kind(hand):
     
@@ -108,9 +114,8 @@ def check_four_of_a_kind(hand):
     for v in values: 
         value_counts[v]+=1
     if sorted(value_counts.values()) == [1,4]:
-        print('8',hand) 
-        return True
-    return False
+        return [True,hand]
+    return [False]
 
 def check_full_house(hand):
     values = [i[0] for i in hand]
@@ -118,17 +123,15 @@ def check_full_house(hand):
     for v in values:
         value_counts[v]+=1
     if sorted(value_counts.values()) == [2,3]:
-        print('7',hand) 
-        return True
-    return False
+        return [True,hand]
+    return [False]
 
 def check_flush(hand):
     suits = [i[1] for i in hand]
     if len(set(suits))==1:
-        print('6',hand) 
-        return True
+        return [True,hand]
     else:
-        return False
+        return [False]
 
 def check_straight(hand):
     
@@ -140,14 +143,12 @@ def check_straight(hand):
     rank_values = [card_order_dict[i] for i in values]
     value_range = max(rank_values) - min(rank_values)
     if len(set(value_counts.values())) == 1 and (value_range==4):
-        print('5',hand) 
-        return True
+        return [True,hand]
     else: 
         #check straight with low Ace
         if set(values) == set(["A", "2", "3", "4", "5"]):
-            print('5A',hand) 
-            return True
-        return False
+            return [True,hand]
+        return [False]
 
 def check_three_of_a_kind(hand):
     
@@ -157,10 +158,9 @@ def check_three_of_a_kind(hand):
         
         value_counts[v]+=1
     if set(value_counts.values()) == set([3,1]):
-        print('4',hand) 
-        return True
+        return [True,hand]
     else:
-        return False
+        return [False]
 
 def check_two_pairs(hand):
     
@@ -169,11 +169,10 @@ def check_two_pairs(hand):
     for v in values:
         
         value_counts[v]+=1
-    if sorted(value_counts.values())==[1,2,2]:
-        print('3',hand) 
-        return True
+    if sorted(value_counts.values())==[1,2,2]: 
+        return [True,hand]
     else:
-        return False
+        return [False]
 
 def check_one_pairs(hand):
     values = [i[0] for i in hand]
@@ -181,26 +180,23 @@ def check_one_pairs(hand):
     for v in values:
         value_counts[v]+=1
     if 2 in value_counts.values():
-        print('2',hand) 
-        return True
+        return [True,hand]
     else:
-        return False
+        return [False]
 
 hand_dict = {9:"straight-flush", 8:"four-of-a-kind", 7:"full-house", 6:"flush", 5:"straight", 4:"three-of-a-kind", 3:"two-pairs", 2:"one-pair", 1:"highest-card"}
 
 #exhaustive search using itertools.combinations
 def play(cards):
-    hand = cards[:2]
-    deck = cards[2:]
     best_hand = 0
-    for i in range(6):
-        possible_combos = combinations(hand, 5-i)
-        for c in possible_combos: 
-            current_hand = list(c) + deck[:i]
-            hand_value = check_hand(current_hand)
-            if hand_value > best_hand:
-                best_hand = hand_value      
-    return hand_dict[best_hand]
+    possible_combos = combinations(cards, 5)
+    for c in possible_combos: 
+        current_hand = list(c)
+        hand_value,best = check_hand(current_hand)
+        if hand_value > best_hand:
+            a = best
+            best_hand = hand_value      
+    return hand_dict[best_hand],a
 
 #Functions for poker strength
 #1.
