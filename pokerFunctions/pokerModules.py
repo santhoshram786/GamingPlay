@@ -4,6 +4,7 @@ Created on Sun Jul 26 10:26:35 2020
 
 @author: Malkari Santhosh
 """
+#Ram kishore
 import itertools
 import random
 from itertools import combinations
