@@ -180,6 +180,53 @@ def check_one_pairs(hand):
 
 hand_dict = {10:"royal-flush", 9:"straight-flush", 8:"four-of-a-kind", 7:"full-house", 6:"flush", 5:"straight", 4:"three-of-a-kind", 3:"two-pairs", 2:"one-pair", 1:"highest-card"}
 
+def two_pairs(a,two,five,cards):
+    
+    if card_order_dict[two[0][0]] >  card_order_dict[two[1][0]]:
+        d = two[0]
+        two[0] = two[1]
+        two[1] = d
+        
+    lis = []
+    f = 0
+
+    for i in range(len(cards)):
+        for j in range(i+1,len(cards)):
+            if(cards[i][0] == cards[j][0]):
+                if (cards[i] not in lis):
+                    lis.append(cards[i])
+                if (cards[j] not in lis):
+                    lis.append(cards[j])
+                    
+    for i in range(len(lis)):
+        for j in range(i+1,len(lis)):
+            if card_order_dict[lis[j][0]] >  card_order_dict[lis[i][0]]:
+                d = lis[j]
+                lis[j] = lis[i]
+                lis[i] = d
+                
+    for i in lis:
+        if i in cards:
+            cards.remove(i)
+            
+    for i in range(len(cards)):
+        for j in range(i+1,len(cards)):
+            if card_order_dict[cards[j][0]] >  card_order_dict[cards[i][0]]:
+                d = cards[j]
+                cards[j] = cards[i]
+                cards[i] = d
+    f=0
+
+    lis = lis + cards[0:1]
+    for i in two:
+        if i not in lis:
+            f +=1
+    if f == 2:
+        lis.remove(lis[-1])
+        lis.append(two[-1])
+    return lis 
+    pass
+
 def one_pair(a,two,five,cards):
     #mini = card_order_dict[two[-1]]
     twovalues = [i[0] for i in two]
@@ -194,7 +241,6 @@ def one_pair(a,two,five,cards):
             break
     lis = []
     f = 0
-    card_order_dict
     d ='a'
 
     for i in range(len(cards)):
@@ -257,5 +303,7 @@ def play(cards):
     cards.sort()
     if best_hand == 2:
         a = one_pair(a,two,five,cards)
+    if best_hand == 3:
+        a = two_pairs(a,two,five,cards)
         
     return hand_dict[best_hand],a
