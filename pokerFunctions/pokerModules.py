@@ -148,8 +148,7 @@ def check_three_of_a_kind(hand):
     
     values = [i[0] for i in hand]
     value_counts = defaultdict(lambda:0)
-    for v in values:
-        
+    for v in values:        
         value_counts[v]+=1
     if set(value_counts.values()) == set([3,1]):
         return [True,hand]
@@ -180,15 +179,95 @@ def check_one_pairs(hand):
 
 hand_dict = {10:"royal-flush", 9:"straight-flush", 8:"four-of-a-kind", 7:"full-house", 6:"flush", 5:"straight", 4:"three-of-a-kind", 3:"two-pairs", 2:"one-pair", 1:"highest-card"}
 
-def two_pairs(a,two,five,cards):
+def flush(a,two,five,cards):
     
     if card_order_dict[two[0][0]] >  card_order_dict[two[1][0]]:
         d = two[0]
         two[0] = two[1]
         two[1] = d
         
+    for i in range(len(cards)):
+        for j in range(i+1,len(cards)):
+            if card_order_dict[cards[j][0]] >  card_order_dict[cards[i][0]]:
+                d = cards[j]
+                cards[j] = cards[i]
+                cards[i] = d
+                
+    for i in range(len(five)):
+        for j in range(i+1,len(five)):
+            if card_order_dict[five[j][0]] >  card_order_dict[five[i][0]]:
+                d = five[j]
+                five[j] = five[i]
+                five[i] = d
+                
+    mysym = a[0][0][-1]
     lis = []
-    f = 0
+    for i in range(len(cards)):
+        if mysym == cards[i][-1]:
+            lis.append(cards[i])
+            
+    return lis[:5]
+
+def straight(a,two,five,cards):
+    for i in range(len(cards)):
+        for j in range(i+1,len(cards)):
+            if card_order_dict[cards[j][0]] >  card_order_dict[cards[i][0]]:
+                d = cards[j]
+                cards[j] = cards[i]
+                cards[i] = d
+    return cards[:5]
+
+def three_kind(a,two,five,cards):
+    if card_order_dict[two[0][0]] >  card_order_dict[two[1][0]]:
+        d = two[0]
+        two[0] = two[1]
+        two[1] = d
+        
+    lis = []
+
+    for i in range(len(cards)):
+        for j in range(i+1,len(cards)):
+            if(cards[i][0] == cards[j][0]):
+                if (cards[i] not in lis):
+                    lis.append(cards[i])
+                if (cards[j] not in lis):
+                    lis.append(cards[j])
+    for i in lis:
+        if i in cards:
+            cards.remove(i)
+
+    for i in range(len(cards)):
+        for j in range(i+1,len(cards)):
+            if card_order_dict[cards[j][0]] >  card_order_dict[cards[i][0]]:
+                d = cards[j]
+                cards[j] = cards[i]
+                cards[i] = d
+
+    f=0
+
+    lis = lis + cards[0:2]
+    for i in two:
+        if i not in lis:
+            f +=1
+    if f == 2:
+        lis.remove(lis[-1])
+        lis.append(two[-1])
+    return lis
+
+
+def two_pairs(a,two,five,cards):
+    
+    if card_order_dict[two[0][0]] >  card_order_dict[two[1][0]]:
+        d = two[0]
+        two[0] = two[1]
+        two[1] = d
+    for i in range(len(cards)):
+        for j in range(i+1,len(cards)):
+            if card_order_dict[cards[j][0]] >  card_order_dict[cards[i][0]]:
+                d = cards[j]
+                cards[j] = cards[i]
+                cards[i] = d        
+    lis = []
 
     for i in range(len(cards)):
         for j in range(i+1,len(cards)):
@@ -204,7 +283,10 @@ def two_pairs(a,two,five,cards):
                 d = lis[j]
                 lis[j] = lis[i]
                 lis[i] = d
-                
+
+    if len(lis)>4:
+        lis = lis[:4]
+        
     for i in lis:
         if i in cards:
             cards.remove(i)
@@ -225,7 +307,6 @@ def two_pairs(a,two,five,cards):
         lis.remove(lis[-1])
         lis.append(two[-1])
     return lis 
-    pass
 
 def one_pair(a,two,five,cards):
     #mini = card_order_dict[two[-1]]
@@ -277,7 +358,66 @@ def one_pair(a,two,five,cards):
         lis.append(two[-1])
     return lis                
 
-            
+def highest(two,five,cards):
+    
+    if card_order_dict[two[0][0]] >  card_order_dict[two[1][0]]:
+        d = two[0]
+        two[0] = two[1]
+        two[1] = d
+        
+    for i in range(len(cards)):
+        for j in range(i+1,len(cards)):
+            if card_order_dict[cards[j][0]] >  card_order_dict[cards[i][0]]:
+                d = cards[j]
+                cards[j] = cards[i]
+                cards[i] = d
+                
+    for i in range(len(five)):
+        for j in range(i+1,len(five)):
+            if card_order_dict[five[j][0]] >  card_order_dict[five[i][0]]:
+                d = five[j]
+                five[j] = five[i]
+                five[i] = d
+
+    lis= cards[:5]
+    f=0
+
+    for i in two:
+        if i not in lis:
+            f +=1
+    if f == 2:
+        lis.remove(lis[-1])
+        lis.append(two[-1])
+    return lis 
+    
+def full_house(a,two,five,cards):
+    
+    if card_order_dict[two[0][0]] >  card_order_dict[two[1][0]]:
+        d = two[0]
+        two[0] = two[1]
+        two[1] = d
+        
+    lis = []
+
+    for i in range(len(cards)):
+        for j in range(i+1,len(cards)):
+            if(cards[i][0] == cards[j][0]):
+                if (cards[i] not in lis):
+                    lis.append(cards[i])
+                if (cards[j] not in lis):
+                    lis.append(cards[j])
+                    
+    for i in range(len(lis)):
+        for j in range(i+1,len(lis)):
+            if card_order_dict[lis[j][0]] >  card_order_dict[lis[i][0]]:
+                d = lis[j]
+                lis[j] = lis[i]
+                lis[i] = d
+    for i in lis:
+        if i in cards:
+            cards.remove(i)
+    return lis[:5]
+
 #exhaustive search using itertools.combinations
 def play(cards):
     two = cards[0:2]
@@ -297,13 +437,20 @@ def play(cards):
             a = []
             a.append(best)
             best_hand = hand_value
-    if best_hand == 1:
-        a = five[0:3]+two
-    #my change
     cards.sort()
+    if best_hand == 1:
+        a = highest(two,five,cards)
     if best_hand == 2:
         a = one_pair(a,two,five,cards)
     if best_hand == 3:
         a = two_pairs(a,two,five,cards)
+    if best_hand == 4:
+        a = three_kind(a,two,five,cards)
+    if best_hand == 5:
+        a = straight(a,two,five,cards)
+    if best_hand == 6:
+        a = flush(a,two,five,cards)
+    if best_hand == 7:
+        a = full_house(a,two,five,cards)
         
-    return hand_dict[best_hand],a
+    return best_hand,a

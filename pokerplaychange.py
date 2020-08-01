@@ -1,6 +1,35 @@
 from pokerFunctions import pokerModules
 import random
 
+card_order_dict = {"2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "T":10,"J":11, "Q":12, "K":13, "A":14}
+hand_dict = {10:"royal-flush", 9:"straight-flush", 8:"four-of-a-kind", 7:"full-house", 6:"flush", 5:"straight", 4:"three-of-a-kind", 3:"two-pairs", 2:"one-pair", 1:"highest-card"}
+def ifdoublewinner(p,main):
+        
+    if p == 5:
+        return main
+    
+    if len(main) == 1:
+        return main
+    
+    else:
+        best_hand = main[0][-1][p][0]
+        if len(best_hand)>1:
+            best_hand = best_hand[0]
+        main1 = []
+        for i in range(0,len(main)):
+            hand_value = main[i][-1][p][0]
+            if len(hand_value)>1:
+                hand_value = hand_value[0]
+
+            if card_order_dict[hand_value] == card_order_dict[best_hand]:
+                main1.append(main[i])
+            if card_order_dict[hand_value] > card_order_dict[best_hand]:
+                main1 = []
+                main1.append(main[i])
+                best_hand = hand_value
+        return ifdoublewinner(p+1,main1)
+
+                   
 #Player count
 while True:
     numberOfPlayers=int(input('enter the palyer count:'))
@@ -44,12 +73,16 @@ while(True):
     Flop_Turn_River=pokerModules.pokerMaster(5)             #getting 5 cards
     
     for gamer in range(numberOfPlayers):
-        print('Player',gamer+1,'cards--->',*player[gamer])  #Displaying player name money cards
+        print('Player',gamer+1,'cards--->',player[gamer][0],player[gamer][1],player[gamer][-1])  #Displaying player name money cards
+    print("**************************************************&&")
     print('Flop,Turn and River cards--->',*Flop_Turn_River) #Displaying 5 cards
+    print("**************************************************&&")
 
     print("Selection")
     for i in range(numberOfPlayers):
-        print('Player',i+1,'--',pokerModules.play(player[i][-1]+Flop_Turn_River))
+        a,b = pokerModules.play(player[i][-1]+Flop_Turn_River)
+        print('Player',i+1,'--',hand_dict[a],b)
+        
     while True:
         count = numberOfPlayers                             #storing players count
         get_amount = 0                                      #sum of amounts of all players
@@ -136,16 +169,22 @@ while(True):
                     
                     if flopcount == 0:          #taking ou last card in 5 cards
                         sample_FTR = Flop_Turn_River
-                        print("Cards are: ",Flop_Turn_River)
+                        print("************************************")
+                        print("* Cards are: ",Flop_Turn_River,"*")
+                        print("************************************")
                         
                     if flopcount == 1:          #taking ou next card in 5 cards
                         sample_FTR = Flop_Turn_River[:4]
-                        print("Cards are: ",Flop_Turn_River[:4])
+                        print("************************************")
+                        print("* Cards are: ",Flop_Turn_River[:4],"*")
+                        print("************************************")
                         flopcount = 0
                         
                     if flopcount == 3:          #taking ou 1st 3 cards in 5 cards
                         sample_FTR = Flop_Turn_River[:3]
-                        print("Cards are: ",Flop_Turn_River[:3])
+                        print("************************************")
+                        print("* Cards are: ",Flop_Turn_River[:3],"*")
+                        print("************************************")
                         flopcount = 1           #to take the next step
                         
                     for gamer in range(count):   #All players check to False
@@ -164,11 +203,36 @@ while(True):
                         next_one = count-1
         
             if len(player) == 1:  #if all player(except one) set to fold
+                our_hand,mainlist = pokerModules.play(player[i][-1]+Flop_Turn_River)
                 print(player[0][0],"won the match")
                 break
             if not aftercards:
                 next_one += 1  #increment to next player
         break
+    
+    best_hand = 0
+    for i in range(numberOfPlayers):#count):
+        our_hand,mainlist = pokerModules.play(player[i][-1]+Flop_Turn_River)
+        if our_hand == best_hand:
+            player[i].append(mainlist)
+            main.append(player[i])
+        if our_hand > best_hand:
+            main = []
+            player[i].append(mainlist)
+            main.append(player[i])
+            best_hand = our_hand
+
+    if len(main) == 1:
+        print("-------------------------------------------------------------------------------------------------------------------------------------")
+        print('Player',main,"won the match by",hand_dict[best_hand])
+        print("-------------------------------------------------------------------------------------------------------------------------------------")
+    else:
+        mai = ifdoublewinner(0,main)
+        print("-------------------------------------------------------------------------------------------------------------------------------------")
+        for i in mai:
+            print(i[0],i[1],i[-2],i[-1],"won the match by",hand_dict[best_hand])
+        print("-------------------------------------------------------------------------------------------------------------------------------------")
+    
     while True:
         select = input("if you continue with same players enter 1 or else 0: ") #selecting to play with same players or not
         if select == '1' or select == '0':
@@ -178,10 +242,6 @@ while(True):
         continue
     else :
         break
-          
-    print("Selection")
-    for i in range(numberOfPlayers):
-        print('Player',i+1,'--',pokerModules.play(player[i][-1]+Flop_Turn_River))
 
     break
      
