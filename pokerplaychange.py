@@ -120,7 +120,7 @@ while(True):
             if inputt == '1':                               #Fold option
                 player.remove(player[next_one])             #Removing the player from player list
                 play_amount.remove(play_amount[next_one])   #Removing the player amount from play_amount list
-                check.remove(check[next_one])               #Removing the player check from check list
+                a = check.pop(next_one)               #Removing the player check from check list
                 count -= 1                                  #Decrementing players count
                 next_one -= 1                               
                 
