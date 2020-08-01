@@ -60,11 +60,12 @@ players = tuple(player)
 plaer = players
 
 while(True):
-    
+
+    total_amt = 0
     flopcount = 3                                           #To take 1st 3 cards
     player = list(players)                                  #players list for playing with same people
     sample_FTR = []                                         #lis of 5 cards at beginning it is emtpy
-    
+    check=[]
     for gamer in range(numberOfPlayers):                    #Getting cards to players
         player[gamer].append(pokerModules.pokerMaster(2))
         check.append(False)                                 #set check to false for each player
@@ -194,7 +195,7 @@ while(True):
                     
                     print("AMOUNT COLLECTED IS :",sum(play_amount))  #printing collected amount until for all check
                     print("Total AMOUNT COLLECTED IS :",get_amount)  #Total amount for whole game
-                    
+                    total_amt = get_amount
                     for i in range(count): #amounts set to 0
                         play_amount[i]=0
                     aftercards = True
@@ -203,7 +204,7 @@ while(True):
                         next_one = count-1
         
             if len(player) == 1:  #if all player(except one) set to fold
-                our_hand,mainlist = pokerModules.play(player[i][-1]+Flop_Turn_River)
+                our_hand,mainlist = pokerModules.play(player[next_one][-1]+Flop_Turn_River)
                 print(player[0][0],"won the match")
                 break
             if not aftercards:
@@ -211,7 +212,7 @@ while(True):
         break
     
     best_hand = 0
-    for i in range(numberOfPlayers):#count):
+    for i in range(count):#numberOfPlayers):count):
         our_hand,mainlist = pokerModules.play(player[i][-1]+Flop_Turn_River)
         if our_hand == best_hand:
             player[i].append(mainlist)
@@ -223,11 +224,17 @@ while(True):
             best_hand = our_hand
 
     if len(main) == 1:
+        print(get_amount)
+        print(main[0][1])
+        main[0][1] = main[0][1]+get_amount
         print("-------------------------------------------------------------------------------------------------------------------------------------")
         print('Player',main,"won the match by",hand_dict[best_hand])
         print("-------------------------------------------------------------------------------------------------------------------------------------")
     else:
         mai = ifdoublewinner(0,main)
+        print(mai[0][1])
+        if len(mai)==1:
+            mai[0][0][1] = mai[0][0][1]+get_amount
         print("-------------------------------------------------------------------------------------------------------------------------------------")
         for i in mai:
             print(i[0],i[1],i[-2],i[-1],"won the match by",hand_dict[best_hand])
@@ -243,7 +250,6 @@ while(True):
     else :
         break
 
-    break
      
     
 

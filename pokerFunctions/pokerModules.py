@@ -209,13 +209,26 @@ def flush(a,two,five,cards):
     return lis[:5]
 
 def straight(a,two,five,cards):
-    for i in range(len(cards)):
-        for j in range(i+1,len(cards)):
-            if card_order_dict[cards[j][0]] >  card_order_dict[cards[i][0]]:
-                d = cards[j]
-                cards[j] = cards[i]
-                cards[i] = d
-    return cards[:5]
+    for k in a:        
+        for i in range(len(k)):
+            for j in range(i+1,len(k)):
+                if card_order_dict[k[j][0]] >  card_order_dict[k[i][0]]:
+                    d = k[j]
+                    k[j] = k[i]
+                    k[i] = d
+    '''length = set(a)
+    setlist = list(length)
+    if len(length) ==1:
+        return setlist
+    else:
+        for i in range(len(setlist)):
+            for j in range(1,len(setlist)):
+                if card_order_dict[setlist[j][0][0]] >  card_order_dict[setlist[i][0][0]]:
+                    d = setlist[j]
+                    setlist[j] = setlist[i]
+                    setlist[i] = d'''
+            
+    return a[0]
 
 def three_kind(a,two,five,cards):
     if card_order_dict[two[0][0]] >  card_order_dict[two[1][0]]:
