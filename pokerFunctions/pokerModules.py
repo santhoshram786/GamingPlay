@@ -216,17 +216,6 @@ def straight(a,two,five,cards):
                     d = k[j]
                     k[j] = k[i]
                     k[i] = d
-    '''length = set(a)
-    setlist = list(length)
-    if len(length) ==1:
-        return setlist
-    else:
-        for i in range(len(setlist)):
-            for j in range(1,len(setlist)):
-                if card_order_dict[setlist[j][0][0]] >  card_order_dict[setlist[i][0][0]]:
-                    d = setlist[j]
-                    setlist[j] = setlist[i]
-                    setlist[i] = d'''
             
     return a[0]
 

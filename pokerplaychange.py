@@ -234,7 +234,7 @@ while(True):
         mai = ifdoublewinner(0,main)
         print(mai[0][1])
         if len(mai)==1:
-            mai[0][0][1] = mai[0][0][1]+get_amount
+            mai[0][1] = mai[0][1]+get_amount
         print("-------------------------------------------------------------------------------------------------------------------------------------")
         for i in mai:
             print(i[0],i[1],i[-2],i[-1],"won the match by",hand_dict[best_hand])

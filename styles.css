@@ -1,0 +1,31 @@
+body{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-image: url(background.jpg);
+}
+#first{
+	width: 250px ;
+	border : solid 1px;
+	box-shadow: 0 0 200px pink;
+	padding: 20px 20px 20px 20px;
+	margin-top: 60px;
+	background-color: orange;
+}
+#headname {
+	text-align: center;
+	clear: left;
+}
+span{
+	font-size: 12px;
+}
+.names{
+	font-size: 16px;
+	font-weight: 20px;
+}
+.block input{
+	width :100%;
+}
+button{
+	width :100%;
+}
